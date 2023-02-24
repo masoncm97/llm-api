@@ -139,6 +139,9 @@ dist
 # Serverless directories
 .serverless/
 
+#data
+data/
+
 # FuseBox cache
 .fusebox/
 
