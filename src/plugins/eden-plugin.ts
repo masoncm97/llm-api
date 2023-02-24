@@ -1,23 +1,22 @@
-import { FastifyInstance } from 'fastify';
+import { FastifyInstance } from "fastify";
 import { EdenClient } from "eden-sdk";
 
-export async function registerEden (server: FastifyInstance) {
+export async function registerEden(server: FastifyInstance) {
 
-    const API_KEY = process.env.API_KEY;
-    const API_SECRET = process.env.API_SECRET;
+  try {
+    let eden = new EdenClient();
 
-    let eden = new EdenClient(API_KEY, API_SECRET);
+    eden.loginApi("admin", "admin");
 
-    eden.loginApi(
-        "admin",
-        "admin"
-    )
-
-    server.decorate('eden', eden);
+    server.decorate("eden", eden);
+    server.log.info("Successfully registered Eden Plugin");
+  } catch (err) {
+    server.log.error("Plugin: Eden, error on register", err);
+  }
 }
 
 declare module "fastify" {
-    interface FastifyInstance {
-      eden?: EdenClient;
-    }
+  interface FastifyInstance {
+    eden?: EdenClient;
+  }
 }

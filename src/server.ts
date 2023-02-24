@@ -3,6 +3,7 @@ import { chatRoutes } from './routes/chat-routes'
 import { createRoutes } from './routes/create-routes'
 import { registerOpenAi } from './plugins/openai-plugin'
 import { registerEden } from './plugins/eden-plugin'
+import config from './plugins/config';
 import * as dotenv from 'dotenv'
 
 /**
@@ -14,13 +15,12 @@ const createServer = async () => {
     logger: true
   })
 
-  dotenv.config()
+  await server.register(config);
+  registerOpenAi(server)
+  registerEden(server)
   
   server.register(chatRoutes)
   server.register(createRoutes)
-
-  registerOpenAi(server)
-  registerEden(server)
 
   
   return server
